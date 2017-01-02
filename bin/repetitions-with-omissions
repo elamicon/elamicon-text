@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+# Look for repeated patterns that omit tokens
+
+import re
+import sys
+
+input = sys.stdin.read()
+
+# use lookahead to find overlapping matches
+# http://stackoverflow.com/a/5616910
+pat_forward  = re.compile(r'(?=((([^ ]{2})(.{1,5})([^ ]{2})).*(\3\5)))')
+for match in re.finditer(pat_forward, input):
+	print(match.group(3)+"\t"+match.group(4)+"\t"+match.group(5))
+print("REVERSE")
+pat_backward = re.compile(r'(?=((([^ ]{2})([^ ]{2})).*\3(.{1,5})\4))')
+for match in re.finditer(pat_backward, input):
+	print(match.group(3)+"\t"+match.group(5)+"\t"+match.group(4))

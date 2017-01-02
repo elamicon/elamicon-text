@@ -1,13 +1,26 @@
-all: elamicon-stream elamicon-normalized-stream elamicon-normalized-nosep-stream
+all: stream res stream/elamicon stream/elamicon-norm stream/elamicon-norm-nosep res/repetitions-with-omissions res/repetitions-with-omissions-nosep
 
-elamicon-stream: raw/elamicon
-	bin/private-only < raw/elamicon | bin/special-to-space > elamicon-stream
+stream:
+	mkdir -p stream
+
+res:
+	mkdir -p res
+
+stream/elamicon: raw/elamicon
+	bin/private-only < $< | bin/special-to-space > $@
 	
-elamicon-normalized-stream: raw/elamicon-normalized
-	bin/private-only < raw/elamicon-normalized | bin/special-to-space > elamicon-normalized-stream
+stream/elamicon-norm: raw/elamicon-normalized
+	bin/private-only < $< | bin/special-to-space > $@
 	
-elamicon-normalized-nosep-stream: raw/elamicon-normalized
-	bin/private-only < raw/elamicon-normalized | bin/special-to-space | bin/strip-sep > elamicon-normalized-nosep-stream
+stream/elamicon-norm-nosep: raw/elamicon-normalized
+	bin/private-only < $< | bin/special-to-space | bin/strip-sep > stream/elamicon-norm-nosep
 	
+res/repetitions-with-omissions: stream/elamicon-norm
+	bin/repetitions-with-omissions < $< > $@
+
+res/repetitions-with-omissions-nosep: stream/elamicon-norm-nosep
+	bin/repetitions-with-omissions < $< > $@
+
 clean:
-	rm elamicon-*
+	rm stream/*
+	rm res/*
