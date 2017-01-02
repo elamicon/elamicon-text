@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+import fileinput
+import sys
+import re
+
+no_private = re.compile("[^\uE000-\uFFFF]")
+
+for line in fileinput.input():
+	sys.stdout.write(no_private.sub("", line))
