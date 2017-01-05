@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+import fileinput
+import sys
+import re
+
+spacerun = re.compile(" +")
+
+for line in fileinput.input():
+	sys.stdout.write(spacerun.sub(" ", line))
